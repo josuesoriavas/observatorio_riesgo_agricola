@@ -3,8 +3,8 @@
 La corrida diaria (correr.bat) arma salida/. Esta app solo muestra lo último que haya ahí.
   Local:  streamlit run app.py
   Nube:   subir app.py, requirements.txt, .streamlit/config.toml, salida/index.html y static/ a GitHub
-          (antes de cada subida: py app.py  -> copia el logo y las fichas PDF a static/).
-Streamlit sirve static/ en /app/static/ (enableStaticServing en .streamlit/config.toml): de ahí salen el logo y los PDF."""
+          (antes de cada subida: py app.py  -> copia el logo y las imágenes de evolución a static/).
+Streamlit sirve static/ en /app/static/ (enableStaticServing en .streamlit/config.toml): de ahí salen el logo y las imágenes."""
 import base64
 import shutil
 from pathlib import Path
@@ -18,8 +18,8 @@ ALTO = 820  # alto del tablero en px; el tablero se escala solo al ancho y alto 
 
 
 def sincronizar():
-    """Copia el logo y las fichas PDF de salida/ a static/ cuando hay versiones nuevas."""
-    for sub in ("img", "fichas"):
+    """Copia el logo y las imágenes de evolución en tierra de salida/ a static/ cuando hay versiones nuevas."""
+    for sub in ("img", "evolucion"):
         origen = SALIDA / sub
         if not origen.exists():
             continue
@@ -37,8 +37,8 @@ def tablero():
     logo = next((f for f in (STATIC / "img" / "logo_midagri.png", SALIDA / "img" / "logo_midagri.png") if f.exists()), None)
     if logo:
         html = html.replace('src="img/logo_midagri.png"', 'src="data:image/png;base64,' + base64.b64encode(logo.read_bytes()).decode() + '"')
-    # PDF: ruta relativa a la app (sirve en local y en la nube)
-    html = html.replace('"fichas/ficha_', '"app/static/fichas/ficha_')
+    # imágenes de evolución en tierra: ruta relativa a la app (sirve en local y en la nube)
+    html = html.replace('"evolucion/', '"app/static/evolucion/')
     return html
 
 
