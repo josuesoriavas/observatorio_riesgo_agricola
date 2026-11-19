@@ -5,6 +5,7 @@ La corrida diaria (correr.bat) arma salida/. Esta app solo muestra lo último qu
   Nube:   subir app.py, requirements.txt, .streamlit/config.toml, salida/index.html y static/ a GitHub
           (antes de cada subida: py app.py  -> copia el logo y las fichas PDF a static/).
 Streamlit sirve static/ en /app/static/ (enableStaticServing en .streamlit/config.toml): de ahí salen el logo y los PDF."""
+import base64
 import shutil
 from pathlib import Path
 
@@ -32,8 +33,12 @@ def sincronizar():
 
 def tablero():
     html = (SALIDA / "index.html").read_text(encoding="utf-8")
-    # dentro de Streamlit las rutas relativas no existen: logo y PDF se piden a /app/static/
-    html = html.replace('src="img/', 'src="/app/static/img/').replace('"fichas/ficha_', '"/app/static/fichas/ficha_')
+    # el logo va incrustado (en Streamlit Cloud la app vive en una subruta y /app/static/ no siempre resuelve)
+    logo = next((f for f in (STATIC / "img" / "logo_midagri.png", SALIDA / "img" / "logo_midagri.png") if f.exists()), None)
+    if logo:
+        html = html.replace('src="img/logo_midagri.png"', 'src="data:image/png;base64,' + base64.b64encode(logo.read_bytes()).decode() + '"')
+    # PDF: ruta relativa a la app (sirve en local y en la nube)
+    html = html.replace('"fichas/ficha_', '"app/static/fichas/ficha_')
     return html
 
 
