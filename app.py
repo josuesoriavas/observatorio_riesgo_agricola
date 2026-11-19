@@ -23,11 +23,10 @@ def sincronizar():
         origen = SALIDA / sub
         if not origen.exists():
             continue
-        destino = STATIC / sub
-        destino.mkdir(parents=True, exist_ok=True)
-        for f in origen.iterdir():
-            d = destino / f.name
+        for f in origen.rglob("*"):  # incluye subcarpetas (evolucion/<ubigeo>/...)
+            d = STATIC / sub / f.relative_to(origen)
             if f.is_file() and (not d.exists() or f.stat().st_mtime > d.stat().st_mtime):
+                d.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(f, d)
 
 
