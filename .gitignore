@@ -1,0 +1,12 @@
+# Solo se publica lo necesario para Streamlit. Todo lo demás (código de la corrida, claves, estado/, historial/) queda fuera.
+/*
+!/.gitignore
+!/app.py
+!/requirements.txt
+!/.streamlit/
+/.streamlit/*
+!/.streamlit/config.toml
+!/salida/
+/salida/*
+!/salida/index.html
+!/static/
