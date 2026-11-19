@@ -47,10 +47,14 @@ if __name__ == "__main__" and not st.runtime.exists():
     print("static/ al día")
 else:
     st.set_page_config(page_title="Observatorio de Riesgo Agrícola", layout="wide", initial_sidebar_state="collapsed")
+    # el tablero ocupa exactamente la ventana: sin márgenes ni desplazamiento de la página de Streamlit
     st.markdown("""<style>
-      header[data-testid="stHeader"], footer, #MainMenu { display: none }
-      .block-container { padding: 0 !important; max-width: 100% !important }
-      iframe { display: block; border: 0 }
+      header[data-testid="stHeader"], footer, #MainMenu, [data-testid="stToolbar"], [data-testid="stDecoration"] { display: none !important }
+      html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stMain"], section.main { overflow: hidden !important; height: 100vh !important }
+      .block-container, [data-testid="stMainBlockContainer"] { padding: 0 !important; margin: 0 !important; max-width: 100% !important }
+      [data-testid="stVerticalBlock"] { gap: 0 !important }
+      [data-testid="stElementContainer"]:has(> .stMarkdown style), .element-container:has(style) { display: none !important }
+      iframe { display: block; border: 0; width: 100% !important; height: 100vh !important }
     </style>""", unsafe_allow_html=True)
     sincronizar()
     if not (SALIDA / "index.html").exists():
