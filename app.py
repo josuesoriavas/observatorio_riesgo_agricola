@@ -19,7 +19,7 @@ ALTO = 820  # alto del tablero en px; el tablero se escala solo al ancho y alto 
 
 def sincronizar():
     """Copia el logo y las imágenes de evolución en tierra de salida/ a static/ cuando hay versiones nuevas."""
-    for sub in ("img", "evolucion", "capas"):
+    for sub in ("img", "evolucion", "capas", "exposicion"):
         origen = SALIDA / sub
         if not origen.exists():
             continue
@@ -37,7 +37,7 @@ def tablero():
     if logo:
         html = html.replace('src="img/logo_midagri.png"', 'src="data:image/png;base64,' + base64.b64encode(logo.read_bytes()).decode() + '"')
     # imágenes de evolución en tierra: ruta relativa a la app (sirve en local y en la nube)
-    html = html.replace('"evolucion/', '"app/static/evolucion/').replace('"capas/', '"app/static/capas/')
+    html = html.replace('"evolucion/', '"app/static/evolucion/').replace('"capas/', '"app/static/capas/').replace('"exposicion/', '"app/static/exposicion/')
     return html
 
 
