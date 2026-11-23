@@ -6,6 +6,7 @@ La corrida diaria (correr.bat) arma salida/. Esta app solo muestra lo último qu
           (antes de cada subida: py app.py  -> copia el logo y las imágenes de evolución a static/).
 Streamlit sirve static/ en /app/static/ (enableStaticServing en .streamlit/config.toml): de ahí salen el logo y las imágenes."""
 import base64
+import json
 import shutil
 from pathlib import Path
 
@@ -37,6 +38,10 @@ def tablero():
     if logo:
         html = html.replace('src="img/logo_midagri.png"', 'src="data:image/png;base64,' + base64.b64encode(logo.read_bytes()).decode() + '"')
     # imágenes de evolución en tierra: ruta relativa a la app (sirve en local y en la nube)
+    # hora de la última revisión automática (static/revisado.json se sube cada hora aunque los datos no cambien)
+    rev = STATIC / "revisado.json"
+    if rev.exists():
+        html = html.replace('"generado":"', '"revisado":"' + json.loads(rev.read_text(encoding="utf-8"))["revisado"] + '","generado":"', 1)
     html = html.replace('"evolucion/', '"app/static/evolucion/').replace('"capas/', '"app/static/capas/').replace('"exposicion/', '"app/static/exposicion/')
     return html
 
